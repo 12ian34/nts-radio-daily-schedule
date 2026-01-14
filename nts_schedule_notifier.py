@@ -141,12 +141,12 @@ def reorder_broadcasts(broadcasts: list[Broadcast], from_time: str) -> tuple[lis
 
 def format_schedule_message(schedules: dict[str, ChannelSchedule], date: datetime, from_time: str) -> str:
     """Format the schedule data into a readable notification message."""
-    date_str = date.strftime("%A, %B %d")
-    lines = [f"📻 NTS Radio Schedule - {date_str}", ""]
+    date_str = date.strftime("%a %d %b").lower()
+    lines = [f"🎵 {date_str}", ""]
 
     for channel_name in sorted(schedules.keys()):
         channel = schedules[channel_name]
-        lines.append(f"━━━ {channel_name.upper()} ━━━")
+        lines.append(f"{channel_name.upper()}")
 
         if not channel["broadcasts"]:
             lines.append("  No broadcasts scheduled")
