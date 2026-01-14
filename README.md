@@ -2,7 +2,7 @@
 
 <a href="https://www.nts.live"><img src="NTS_Radio_logo.svg.png" alt="NTS Radio" width="150"></a>
 
-Get a daily notification with the full NTS Radio schedule for Channel 1 and Channel 2. Shows are ordered starting from your notification time, with earlier shows listed at the end.
+Get a daily notification with the full NTS Radio schedule for Channel 1 and Channel 2. Shows are ordered starting from your notification time, with earlier shows listed at the end. Tap the action buttons to jump straight to the live stream.
 
 [**NTS**](https://www.nts.live) is an independent online radio station broadcasting 24/7 from London, Los Angeles, Shanghai, and Manchester. With hundreds of resident DJs and guest shows spanning every genre imaginable—from ambient to grime, jazz to techno, and everything in between—NTS is a home for music discovery and underground culture.
 

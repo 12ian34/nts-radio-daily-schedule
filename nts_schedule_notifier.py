@@ -178,6 +178,7 @@ def send_notification(message: str, title: str = "NTS Daily Schedule") -> bool:
         "Title": title,
         "Priority": "default",
         "Tags": "radio,music",
+        "Actions": "view, Channel 1, https://www.nts.live/1; view, Channel 2, https://www.nts.live/2",
     }
 
     logger.info(f"Sending notification to {url}")

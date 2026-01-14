@@ -24,7 +24,7 @@ nts-daily-schedule-notifier/
 1. **Fetches schedule** from NTS Radio's API (`https://www.nts.live/api/v2/radio/schedule/{channel}`)
 2. **Reorders** broadcasts so shows from the notification time onwards appear first, earlier shows at the end
 3. **Formats** the schedule for both Channel 1 and Channel 2 into a readable message
-4. **Sends notification** via ntfy.sh HTTP POST request
+4. **Sends notification** via ntfy.sh HTTP POST request with action buttons to open live streams
 
 ## Configuration
 
@@ -81,6 +81,7 @@ On your phone/device, subscribe to your ntfy topic:
 - Added `.gitignore`
 - Added configurable `NOTIFICATION_TIME` setting
 - Schedule now reorders shows: upcoming first, earlier shows at end
+- Added action buttons to open Channel 1/2 live streams directly
 
 ## Future plans / Ideas
 
