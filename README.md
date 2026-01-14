@@ -1,6 +1,6 @@
 # NTS Daily Schedule Notifier
 
-[![NTS Radio](NTS_Radio_logo.svg.png)](https://www.nts.live)
+<a href="https://www.nts.live"><img src="NTS_Radio_logo.svg.png" alt="NTS Radio" width="150"></a>
 
 Get a daily notification with the full NTS Radio schedule for Channel 1 and Channel 2. Shows are ordered starting from your notification time, with earlier shows listed at the end.
 
