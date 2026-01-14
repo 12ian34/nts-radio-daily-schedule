@@ -1,0 +1,12 @@
+[project]
+name = "nts-daily-schedule-notifier"
+version = "0.1.0"
+description = "Sends daily NTS Radio schedule notifications via ntfy.sh"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "requests>=2.31.0",
+]
+
+[project.scripts]
+nts-schedule-notifier = "nts_schedule_notifier:main"
