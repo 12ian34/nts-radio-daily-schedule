@@ -166,6 +166,3 @@ User=YOUR_USER
 - [ ] Filter by favorite shows
 - [ ] Timezone configuration
 
-## License
-
-MIT
