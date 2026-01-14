@@ -146,7 +146,7 @@ def format_schedule_message(schedules: dict[str, ChannelSchedule], date: datetim
 
     for channel_name in sorted(schedules.keys()):
         channel = schedules[channel_name]
-        lines.append(f"{channel_name.upper()}")
+        lines.append(f"--- {channel_name.lower()} ---")
 
         if not channel["broadcasts"]:
             lines.append("  No broadcasts scheduled")
@@ -156,11 +156,11 @@ def format_schedule_message(schedules: dict[str, ChannelSchedule], date: datetim
             # Show upcoming broadcasts first
             for broadcast in upcoming:
                 time_range = f"{broadcast['start_time']}-{broadcast['end_time']}"
-                lines.append(f"  {time_range}  {broadcast['name']}")
+                lines.append(f"{time_range} {broadcast['name']}")
 
             # Show earlier broadcasts (already passed) after a separator
             if earlier:
-                lines.append("  ┄┄┄ earlier ┄┄┄")
+                lines.append("--- earlier ---")
                 for broadcast in earlier:
                     time_range = f"{broadcast['start_time']}-{broadcast['end_time']}"
                     lines.append(f"  {time_range}  {broadcast['name']}")
