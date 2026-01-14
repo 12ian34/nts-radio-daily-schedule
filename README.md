@@ -161,6 +161,13 @@ WorkingDirectory=/home/YOUR_USER/nts-daily-schedule-notifier
 User=YOUR_USER
 ```
 
+## Roadmap
+
+- [ ] Single interactive install script (no manual steps)
+- [ ] Show descriptions/genre tags in notifications
+- [ ] Filter by favorite shows
+- [ ] Timezone configuration
+
 ## License
 
 MIT

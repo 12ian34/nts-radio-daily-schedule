@@ -84,6 +84,13 @@ On your phone/device, subscribe to your ntfy topic:
 
 ## Future plans / Ideas
 
+- [ ] Single interactive install script (`install.sh`) that handles everything:
+  - Prompts for ntfy topic
+  - Prompts for notification time
+  - Auto-detects username and paths
+  - Installs uv if needed
+  - Sets up systemd service and timer
 - [ ] Add show descriptions or genre tags to notifications
 - [ ] Optional: filter by favorite shows
 - [ ] Add timezone configuration for non-UTC setups
+- [ ] Uninstall script to cleanly remove service/timer
