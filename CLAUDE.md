@@ -2,48 +2,51 @@
 
 ## Purpose
 
-A Python script designed to run on a Raspberry Pi server that sends a daily notification via [ntfy.sh](https://ntfy.sh) every morning at 7am with the NTS Radio schedule for both Channel 1 and Channel 2.
+A Python script designed to run on a Raspberry Pi server that sends a daily notification via [ntfy.sh](https://ntfy.sh) with the NTS Radio schedule for both Channel 1 and Channel 2. Notification time is configurable.
 
 ## What's in this folder
 
 ```
 nts-daily-schedule-notifier/
+├── .env                           # Local config (git-ignored)
+├── .env.example                   # Example config template
+├── .gitignore                     # Git ignore rules
 ├── CLAUDE.md                      # This file (dev notes)
 ├── README.md                      # Setup instructions
 ├── nts_schedule_notifier.py       # Main Python script
 ├── pyproject.toml                 # Python project config (uv)
 ├── nts-schedule-notifier.service  # Systemd service unit
-└── nts-schedule-notifier.timer    # Systemd timer (7am daily trigger)
+└── nts-schedule-notifier.timer    # Systemd timer (daily trigger)
 ```
 
 ## How it works
 
 1. **Fetches schedule** from NTS Radio's API (`https://www.nts.live/api/v2/radio/schedule/{channel}`)
-2. **Formats** the schedule for both Channel 1 and Channel 2 into a readable message
-3. **Sends notification** via ntfy.sh HTTP POST request
+2. **Reorders** broadcasts so shows from the notification time onwards appear first, earlier shows at the end
+3. **Formats** the schedule for both Channel 1 and Channel 2 into a readable message
+4. **Sends notification** via ntfy.sh HTTP POST request
 
 ## Configuration
 
-Environment variables:
-- `NTFY_TOPIC` - Your ntfy.sh topic name (default: `nts-daily-schedule`)
+Settings are stored in `.env` file (copy from `.env.example`):
+- `NTFY_TOPIC` - Your ntfy.sh topic name (required, keep secret)
 - `NTFY_SERVER` - ntfy server URL (default: `https://ntfy.sh`)
+- `NOTIFICATION_TIME` - Time in HH:MM format (default: `07:00`). Controls schedule ordering.
 
 ## Deployment on Raspberry Pi
 
 ### Quick setup
 
 ```bash
-# Clone/copy to Pi
-scp -r . pi@raspberrypi:~/nts-daily-schedule-notifier/
-
-# SSH into Pi
-ssh pi@raspberrypi
-
 # Install uv (if not already installed)
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Test the script (uv will auto-install dependencies)
+# Configure .env
 cd ~/nts-daily-schedule-notifier
+cp .env.example .env
+nano .env  # Set your NTFY_TOPIC
+
+# Test the script (uv will auto-install dependencies)
 uv run nts_schedule_notifier.py
 
 # Install systemd service and timer
@@ -64,8 +67,7 @@ systemctl list-timers nts-schedule-notifier.timer
 ### Subscribe to notifications
 
 On your phone/device, subscribe to your ntfy topic:
-- Open ntfy app or visit `https://ntfy.sh/nts-daily-schedule` (or your custom topic)
-- Tap "Subscribe to topic"
+- Open ntfy app and subscribe to the topic you set in `.env`
 
 ## Timeline / Changelog
 
@@ -75,10 +77,13 @@ On your phone/device, subscribe to your ntfy topic:
 - ntfy.sh notification integration
 - Systemd service and timer for Raspberry Pi deployment
 - Using uv for Python package management
+- Added `.env` file support for configuration (python-dotenv)
+- Added `.gitignore`
+- Added configurable `NOTIFICATION_TIME` setting
+- Schedule now reorders shows: upcoming first, earlier shows at end
 
 ## Future plans / Ideas
 
 - [ ] Add show descriptions or genre tags to notifications
 - [ ] Optional: filter by favorite shows
-- [ ] Optional: multiple notification times (morning + evening preview)
 - [ ] Add timezone configuration for non-UTC setups

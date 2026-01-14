@@ -19,9 +19,8 @@ Type=oneshot
 ExecStart=/home/pi/.local/bin/uv run /home/pi/nts-daily-schedule-notifier/nts_schedule_notifier.py
 WorkingDirectory=/home/pi/nts-daily-schedule-notifier
 User=pi
-Environment="NTFY_TOPIC=nts-daily-schedule"
-Environment="NTFY_SERVER=https://ntfy.sh"
 Environment="PATH=/home/pi/.local/bin:/usr/local/bin:/usr/bin:/bin"
+# Note: NTFY_TOPIC and NTFY_SERVER are loaded from .env file in the project directory
 
 # Logging
 StandardOutput=journal

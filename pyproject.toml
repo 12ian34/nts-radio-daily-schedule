@@ -5,6 +5,7 @@ description = "Sends daily NTS Radio schedule notifications via ntfy.sh"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "python-dotenv>=1.0.0",
     "requests>=2.31.0",
 ]
 

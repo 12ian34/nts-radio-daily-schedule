@@ -1,6 +1,6 @@
 # NTS Daily Schedule Notifier
 
-Get a daily notification at 7am with the full NTS Radio schedule for Channel 1 and Channel 2.
+Get a daily notification with the full NTS Radio schedule for Channel 1 and Channel 2. Shows are ordered starting from your notification time, with earlier shows listed at the end.
 
 ![ntfy notification example](https://ntfy.sh/static/img/ntfy.png)
 
@@ -23,11 +23,27 @@ source ~/.bashrc  # or restart your terminal
 
 ```bash
 cd ~
-git clone https://github.com/YOUR_USERNAME/nts-daily-schedule-notifier.git
+git clone https://github.com/12ian34/nts-daily-schedule-notifier.git
 cd nts-daily-schedule-notifier
 ```
 
-### 3. Test the script
+### 3. Configure ntfy
+
+```bash
+# Copy the example config
+cp .env.example .env
+
+# Edit and set your secret ntfy topic name
+nano .env
+```
+
+### 4. Subscribe to notifications
+
+On your phone:
+1. Install the [ntfy app](https://ntfy.sh)
+2. Subscribe to the same topic you set in your `.env` file
+
+### 5. Test the script
 
 ```bash
 uv run nts_schedule_notifier.py
@@ -35,15 +51,7 @@ uv run nts_schedule_notifier.py
 
 You should see output showing the schedule for both channels and a "Notification sent successfully" message.
 
-### 4. Subscribe to notifications
-
-On your phone:
-1. Install the [ntfy app](https://ntfy.sh)
-2. Subscribe to the topic: `nts-daily-schedule`
-
-Or use a custom topic by setting `NTFY_TOPIC` environment variable.
-
-### 5. Set up the daily timer
+### 6. Set up the daily timer
 
 ```bash
 # Copy service and timer files
@@ -61,7 +69,7 @@ sudo systemctl enable --now nts-schedule-notifier.timer
 systemctl list-timers nts-schedule-notifier.timer
 ```
 
-### 6. Test the service manually
+### 7. Test the service manually
 
 ```bash
 sudo systemctl start nts-schedule-notifier.service
@@ -70,28 +78,41 @@ journalctl -u nts-schedule-notifier.service -f
 
 ## Configuration
 
-Set environment variables in the service file (`/etc/systemd/system/nts-schedule-notifier.service`):
+Configuration is stored in a `.env` file in the project directory. Copy the example and edit as needed:
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `NTFY_TOPIC` | `nts-daily-schedule` | Your ntfy.sh topic name |
-| `NTFY_SERVER` | `https://ntfy.sh` | ntfy server URL (use your own if self-hosted) |
-
-## Customising the schedule time
-
-Edit `/etc/systemd/system/nts-schedule-notifier.timer`:
-
-```ini
-[Timer]
-OnCalendar=*-*-* 07:00:00  # Change to your preferred time
+```bash
+cp .env.example .env
+nano .env
 ```
 
-Then reload:
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `NTFY_TOPIC` | Yes | Your ntfy.sh topic name (pick something unique and secret) |
+| `NTFY_SERVER` | No | ntfy server URL (default: `https://ntfy.sh`) |
+| `NOTIFICATION_TIME` | No | Time in HH:MM format (default: `07:00`). Controls schedule ordering. |
 
+## Customising the notification time
+
+To change when notifications are sent, update **both** the `.env` file and systemd timer:
+
+1. Edit `.env`:
+```bash
+NOTIFICATION_TIME=08:30
+```
+
+2. Edit `/etc/systemd/system/nts-schedule-notifier.timer`:
+```ini
+[Timer]
+OnCalendar=*-*-* 08:30:00
+```
+
+3. Reload the timer:
 ```bash
 sudo systemctl daemon-reload
 sudo systemctl restart nts-schedule-notifier.timer
 ```
+
+The `NOTIFICATION_TIME` setting controls how the schedule is ordered—shows starting from that time appear first, with earlier shows listed at the end under "earlier".
 
 ## Updating
 

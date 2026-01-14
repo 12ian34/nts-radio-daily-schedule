@@ -1,15 +1,20 @@
-# Systemd timer to trigger NTS Schedule Notifier at 7am daily
+# Systemd timer to trigger NTS Schedule Notifier daily
 #
 # Installation:
 #   1. Copy this file to /etc/systemd/system/
 #   2. Run: sudo systemctl daemon-reload
 #   3. Run: sudo systemctl enable --now nts-schedule-notifier.timer
 #
+# To change the notification time:
+#   1. Edit OnCalendar below (e.g., 08:30:00 for 8:30am)
+#   2. Update NOTIFICATION_TIME in .env to match
+#   3. Run: sudo systemctl daemon-reload && sudo systemctl restart nts-schedule-notifier.timer
+#
 # Check timer status:
 #   systemctl list-timers nts-schedule-notifier.timer
 
 [Unit]
-Description=Run NTS Schedule Notifier at 7am daily
+Description=Run NTS Schedule Notifier daily
 
 [Timer]
 OnCalendar=*-*-* 07:00:00

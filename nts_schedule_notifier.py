@@ -11,9 +11,14 @@ import logging
 import os
 import sys
 from datetime import datetime, timezone
+from pathlib import Path
 from typing import TypedDict
 
 import requests
+from dotenv import load_dotenv
+
+# Load .env file from the same directory as this script
+load_dotenv(Path(__file__).parent / ".env")
 
 # Configure logging
 logging.basicConfig(
@@ -23,9 +28,12 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Configuration via environment variables
-NTFY_TOPIC = os.environ.get("NTFY_TOPIC", "nts-daily-schedule")
+# Configuration via .env file
+NTFY_TOPIC = os.environ.get("NTFY_TOPIC")
+if not NTFY_TOPIC:
+    raise RuntimeError("NTFY_TOPIC must be set in .env file")
 NTFY_SERVER = os.environ.get("NTFY_SERVER", "https://ntfy.sh")
+NOTIFICATION_TIME = os.environ.get("NOTIFICATION_TIME", "07:00")
 NTS_API_BASE = "https://www.nts.live/api/v2"
 REQUEST_TIMEOUT = 30
 
@@ -108,7 +116,30 @@ def fetch_all_schedules(target_date: datetime) -> dict[str, ChannelSchedule]:
     return schedules
 
 
-def format_schedule_message(schedules: dict[str, ChannelSchedule], date: datetime) -> str:
+def reorder_broadcasts(broadcasts: list[Broadcast], from_time: str) -> tuple[list[Broadcast], list[Broadcast]]:
+    """
+    Split broadcasts into upcoming and earlier shows.
+
+    Args:
+        broadcasts: List of broadcasts for the day
+        from_time: Time string in HH:MM format (e.g., "07:00")
+
+    Returns:
+        Tuple of (upcoming broadcasts, earlier broadcasts)
+    """
+    upcoming: list[Broadcast] = []
+    earlier: list[Broadcast] = []
+
+    for broadcast in broadcasts:
+        if broadcast["start_time"] >= from_time:
+            upcoming.append(broadcast)
+        else:
+            earlier.append(broadcast)
+
+    return upcoming, earlier
+
+
+def format_schedule_message(schedules: dict[str, ChannelSchedule], date: datetime, from_time: str) -> str:
     """Format the schedule data into a readable notification message."""
     date_str = date.strftime("%A, %B %d")
     lines = [f"📻 NTS Radio Schedule - {date_str}", ""]
@@ -120,9 +151,19 @@ def format_schedule_message(schedules: dict[str, ChannelSchedule], date: datetim
         if not channel["broadcasts"]:
             lines.append("  No broadcasts scheduled")
         else:
-            for broadcast in channel["broadcasts"]:
+            upcoming, earlier = reorder_broadcasts(channel["broadcasts"], from_time)
+
+            # Show upcoming broadcasts first
+            for broadcast in upcoming:
                 time_range = f"{broadcast['start_time']}-{broadcast['end_time']}"
                 lines.append(f"  {time_range}  {broadcast['name']}")
+
+            # Show earlier broadcasts (already passed) after a separator
+            if earlier:
+                lines.append("  ┄┄┄ earlier ┄┄┄")
+                for broadcast in earlier:
+                    time_range = f"{broadcast['start_time']}-{broadcast['end_time']}"
+                    lines.append(f"  {time_range}  {broadcast['name']}")
 
         lines.append("")
 
@@ -161,6 +202,7 @@ def main() -> int:
     logger.info("NTS Schedule Notifier starting")
     logger.info(f"NTFY_TOPIC: {NTFY_TOPIC}")
     logger.info(f"NTFY_SERVER: {NTFY_SERVER}")
+    logger.info(f"NOTIFICATION_TIME: {NOTIFICATION_TIME}")
 
     try:
         today = datetime.now(timezone.utc)
@@ -174,7 +216,7 @@ def main() -> int:
             )
             return 1
 
-        message = format_schedule_message(schedules, today)
+        message = format_schedule_message(schedules, today, NOTIFICATION_TIME)
         logger.info(f"Formatted message:\n{message}")
 
         if send_notification(message):
