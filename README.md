@@ -8,6 +8,54 @@ Get a daily notification with the full NTS Radio schedule for Channel 1 and Chan
 
 This project is not affiliated with NTS. Just a fan who wanted schedule notifications. 📻
 
+## Example notification
+
+```
+🎵 wed 14 jan
+
+--- CHANNEL 1 ---
+07:00-09:00 THE EARLY BIRD SHOW W/ SPIRIT BLUE
+09:00-11:00 The NTS Breakfast Show w/ NAOMI ASA
+11:00-13:00 SOUP TO NUTS W/ SHY ONE
+13:00-15:00 Tropic of Love w/ Mafalda, Peter Zummo & Sophia Hansen-Knarhoi
+15:00-17:00 LOUISE CHEN
+18:00-19:00 HE4RTBROKEN W/ KONNIE
+19:00-20:00 TIM REAPER: Kid Lib's Jungle Rush 1 & 2
+20:00-21:00 MARTELO
+21:00-22:00 HOOVERSOUND w/ Devnull
+22:00-23:00 NKISI
+--- earlier ---
+  00:00-02:00  After dark w/ HELM
+  02:00-03:00  Open Hand Real Flames
+  03:00-04:00  MUSIC 4 LOVERS W/ JABU & ANDY PAYBACK (R)
+  04:00-05:00  Studio One - Instrumentals (R)
+  05:00-06:00  Carlos René: Women of Bolero in the '50s & '60s (R)
+  06:00-07:00  ONDAS w/ Tsukasa Ito (R)
+
+--- CHANNEL 2 ---
+07:00-08:00 Séance Centre (R)
+08:00-10:00 Death Is Not The End (R)
+10:00-11:00 OREN AMBARCHI (R)
+11:00-12:00 HEGOA (R)
+12:00-13:00 ACID MEMORIES W/ ASTRAL VIBES
+13:00-14:00 SHUKAI
+14:00-15:00 80's RAMPWALK
+15:00-16:00 IKR. IMPRINT
+16:00-17:00 FIFTH WORLD w/ Contractor
+17:00-18:00 GETTING WARMER W/ JEN MONROE
+18:00-19:00 SOPHIE THATCHER
+19:00-20:00 HOMESHAKE
+20:00-21:00 PANORAMA HEAVEN W/ BIANCA LEXIS
+21:00-22:00 HEAVEN AND EARTH MAGIC W/ JOCELYN ROMO
+22:00-23:00 Luke Mele w/ grrrden
+--- earlier ---
+  00:00-01:00  Parannoul - Mountain Still Breathing
+  01:00-02:00  8ULENTINA
+  02:00-04:00  NTS Guide to: Japanese New Age and Environmental Music Vol II (R)
+  04:00-06:00  Low Life Loves You w/ Bill Brewster - Scandinavian Special (R)
+  06:00-07:00  Horsegirl Sounds Radio Hour (R)
+```
+
 ## Requirements
 
 - Raspberry Pi (or any Linux server)
