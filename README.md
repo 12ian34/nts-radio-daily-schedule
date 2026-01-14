@@ -155,6 +155,16 @@ WorkingDirectory=/home/YOUR_USER/nts-daily-schedule-notifier
 User=YOUR_USER
 ```
 
+## About NTS Radio
+
+<a href="https://www.nts.live">
+  <img src="https://www.nts.live/og-default.png" alt="NTS Radio" width="600">
+</a>
+
+[**NTS**](https://www.nts.live) is an independent online radio station broadcasting 24/7 from London, Los Angeles, Shanghai, and Manchester. With hundreds of resident DJs and guest shows spanning every genre imaginable—from ambient to grime, jazz to techno, and everything in between—NTS is a home for music discovery and underground culture.
+
+This project is not affiliated with NTS. Just a fan who wanted schedule notifications. 📻
+
 ## License
 
 MIT
