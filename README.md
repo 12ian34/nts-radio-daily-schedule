@@ -1,4 +1,4 @@
-# NTS Daily Schedule Notifier
+# NTS radio daily schedule
 
 <a href="https://www.nts.live"><img src="NTS_Radio_logo.svg.png" alt="NTS Radio" width="150"></a>
 
