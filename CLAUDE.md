@@ -14,9 +14,7 @@ nts-daily-schedule-notifier/
 ├── CLAUDE.md                      # This file (dev notes)
 ├── README.md                      # Setup instructions
 ├── nts_schedule_notifier.py       # Main Python script
-├── pyproject.toml                 # Python project config (uv)
-├── nts-schedule-notifier.service  # Systemd service unit
-└── nts-schedule-notifier.timer    # Systemd timer (daily trigger)
+└── pyproject.toml                 # Python project config (uv)
 ```
 
 ## How it works
@@ -31,6 +29,7 @@ nts-daily-schedule-notifier/
 Settings are stored in `.env` file (copy from `.env.example`):
 - `NTFY_TOPIC` - Your ntfy.sh topic name (required, keep secret)
 - `NTFY_SERVER` - ntfy server URL (default: `https://ntfy.sh`)
+- `NTFY_ACCESS_TOKEN` - Access token for ntfy authentication (optional, for protected servers)
 - `NOTIFICATION_TIME` - Time in HH:MM format (default: `07:00`). Controls schedule ordering.
 
 ## Deployment on Raspberry Pi
@@ -41,28 +40,29 @@ Settings are stored in `.env` file (copy from `.env.example`):
 # Install uv (if not already installed)
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Configure .env
-cd ~/nts-daily-schedule-notifier
+# Clone and configure
+cd ~
+git clone <repo-url> nts-daily-schedule-notifier
+cd nts-daily-schedule-notifier
 cp .env.example .env
-nano .env  # Set your NTFY_TOPIC
+nano .env  # Set your NTFY_TOPIC (and optionally NTFY_ACCESS_TOKEN)
 
 # Test the script (uv will auto-install dependencies)
 uv run nts_schedule_notifier.py
 
-# Install systemd service and timer
-sudo cp nts-schedule-notifier.service /etc/systemd/system/
-sudo cp nts-schedule-notifier.timer /etc/systemd/system/
+# Schedule daily at 7am via crontab
+crontab -e
+# Add this line:
+# 0 7 * * * cd /home/pi/nts-daily-schedule-notifier && /home/pi/.local/bin/uv run nts_schedule_notifier.py >> /home/pi/nts-daily-schedule-notifier/cron.log 2>&1
 
-# Edit service file if needed (change paths/user)
-sudo nano /etc/systemd/system/nts-schedule-notifier.service
-
-# Enable and start timer
-sudo systemctl daemon-reload
-sudo systemctl enable --now nts-schedule-notifier.timer
-
-# Verify timer is active
-systemctl list-timers nts-schedule-notifier.timer
+# Verify crontab
+crontab -l
 ```
+
+### Changing the notification time
+
+1. Edit crontab (`crontab -e`) and change the schedule (e.g., `0 8 * * *` for 8am)
+2. Update `NOTIFICATION_TIME` in `.env` to match (controls which shows appear first)
 
 ### Subscribe to notifications
 
@@ -71,11 +71,14 @@ On your phone/device, subscribe to your ntfy topic:
 
 ## Timeline / Changelog
 
+### 2026-01-19
+- Added `NTFY_ACCESS_TOKEN` support for authenticated ntfy servers
+- Switched from systemd to crontab for scheduling (simpler setup)
+
 ### 2026-01-14
 - Initial implementation
 - Python script fetching NTS API schedule
 - ntfy.sh notification integration
-- Systemd service and timer for Raspberry Pi deployment
 - Using uv for Python package management
 - Added `.env` file support for configuration (python-dotenv)
 - Added `.gitignore`
@@ -90,8 +93,7 @@ On your phone/device, subscribe to your ntfy topic:
   - Prompts for notification time
   - Auto-detects username and paths
   - Installs uv if needed
-  - Sets up systemd service and timer
+  - Sets up crontab entry
 - [ ] Add show descriptions or genre tags to notifications
 - [ ] Optional: filter by favorite shows
 - [ ] Add timezone configuration for non-UTC setups
-- [ ] Uninstall script to cleanly remove service/timer

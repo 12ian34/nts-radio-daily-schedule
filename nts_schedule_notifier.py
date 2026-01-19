@@ -33,6 +33,7 @@ NTFY_TOPIC = os.environ.get("NTFY_TOPIC")
 if not NTFY_TOPIC:
     raise RuntimeError("NTFY_TOPIC must be set in .env file")
 NTFY_SERVER = os.environ.get("NTFY_SERVER", "https://ntfy.sh")
+NTFY_ACCESS_TOKEN = os.environ.get("NTFY_ACCESS_TOKEN")
 NOTIFICATION_TIME = os.environ.get("NOTIFICATION_TIME", "07:00")
 NTS_API_BASE = "https://www.nts.live/api/v2"
 REQUEST_TIMEOUT = 30
@@ -180,6 +181,9 @@ def send_notification(message: str, title: str = "NTS Daily Schedule") -> bool:
         "Tags": "radio,music",
         "Actions": "view, Channel 1, https://www.nts.live/1; view, Channel 2, https://www.nts.live/2",
     }
+
+    if NTFY_ACCESS_TOKEN:
+        headers["Authorization"] = f"Bearer {NTFY_ACCESS_TOKEN}"
 
     logger.info(f"Sending notification to {url}")
 

@@ -34,3 +34,4 @@ htmlcov/
 .idea/
 *.swp
 *.swo
+cron.log
